@@ -141,9 +141,87 @@ public class Interface extends JFrame {
             oldAnimalsLabel = new JLabel("    Old animals: " + farm.getOldAnimals());
         }
 
-        JButton finishYear = new JButton("Finish year");
-        if (contractSigned) {
-            finishYear.addActionListener(
+        //row #1
+        info.add(Box.createGlue());
+        info.add(yearInfoLabel);
+        info.add(Box.createGlue());
+
+        //row #2
+        info.add(moneyLabel);
+        info.add(Box.createGlue());
+        info.add(Box.createGlue());
+
+        //row #3
+        info.add(feedLabel);
+        if (!contractSigned) {
+            info.add(Box.createGlue());
+            info.add(Box.createGlue());
+        }
+        else {
+            JLabel purchasedFeedLabel = new JLabel("Purchased (" + farm.getFeedPurchased() + "/" + contract.getFeedPerYear() + ")");
+            JButton purchaseMoreFeedButton = purchaseMoreFeedButton(this);
+            info.add(purchasedFeedLabel);
+            info.add(purchaseMoreFeedButton);
+        }
+
+        //row #4
+        info.add(youngAnimalsLabel);
+        if (!contractSigned) {
+            info.add(Box.createGlue());
+            info.add(Box.createGlue());
+        }
+        else {
+            JLabel soldYoungAnimalsLabel = new JLabel("Sold (" + farm.getYoungAnimalsSold() + "/" + contract.getYoungAnimalsPerYear() + ")");
+            JButton sellMoreYoungAnimalsButton = sellMoreYoungAnimalsButton(this);
+            info.add(soldYoungAnimalsLabel);
+            info.add(sellMoreYoungAnimalsButton);
+        }
+
+        //row #5
+        info.add(adultAnimalsLabel);
+        if (!contractSigned) {
+            info.add(Box.createGlue());
+            info.add(Box.createGlue());
+        }
+        else {
+            JLabel soldAdultAnimalsLabel = new JLabel("Sold (" + farm.getAdultAnimalsSold() + "/" + contract.getAdultAnimalsPerYear() + ")");
+            JButton sellMoreAdultAnimalsButton = sellMoreAdultAnimalsButton(this);
+            info.add(soldAdultAnimalsLabel);
+            info.add(sellMoreAdultAnimalsButton);
+        }
+
+        //row #6
+        info.add(oldAnimalsLabel);
+        if (!contractSigned) {
+            info.add(Box.createGlue());
+            info.add(Box.createGlue());
+        }
+        else {
+            JLabel soldOldAnimalsLabel = new JLabel("Sold (" + farm.getOldAnimalsSold() + "/" + contract.getOldAnimalsPerYear() + ")");
+            JButton sellMoreOldAnimalsButton = sellMoreOldAnimalsButton(this);
+            info.add(soldOldAnimalsLabel);
+            info.add(sellMoreOldAnimalsButton);
+        }
+
+        //row #7
+        info.add(Box.createGlue());
+        if (!contractSigned) {
+            info.add(Box.createGlue());
+        }
+        else {
+            JButton fulfillAllContractTerms = fulfillAllContractTerms(this);
+            info.add(fulfillAllContractTerms);
+        }
+        JButton finishYearButton = finishYearButton(this);
+        info.add(finishYearButton);
+
+        return info;
+    }
+
+    public JButton finishYearButton (Interface inter) {
+        JButton finishYearButton = new JButton("Finish year");
+        if (inter.game.getContract().isSigned()) {
+            finishYearButton.addActionListener(
                     new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
@@ -165,7 +243,7 @@ public class Interface extends JFrame {
             );
         }
         else {
-            finishYear.addActionListener(
+            finishYearButton.addActionListener(
                     new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
@@ -174,155 +252,103 @@ public class Interface extends JFrame {
                     }
             );
         }
+        return finishYearButton;
+    }
 
-        info.add(Box.createGlue());
-        info.add(yearInfoLabel);
-        info.add(Box.createGlue());
-
-        info.add(moneyLabel);
-        info.add(Box.createGlue());
-        info.add(Box.createGlue());
-
-        info.add(feedLabel);
-        if (!contractSigned) {
-            info.add(Box.createGlue());
-            info.add(Box.createGlue());
-        }
-        else {
-            JLabel purchasedFeedLabel = new JLabel("Purchased (" + farm.getFeedPurchased() + "/" + contract.getFeedPerYear() + ")");
-            JButton purchaseMoreFeedButton = new JButton("Purchase more");
-            purchaseMoreFeedButton.addActionListener(
-                    new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            int feedCost = contract.getFeedCost();
-                            String newValue = JOptionPane.showInputDialog(inter, "Feed costs " +
-                                    feedCost + " per unit. How many you want to purchase?", "0");
-                            if (newValue != null) {
-                                try {
-                                    int newValueInt = Integer.parseInt(newValue);
-                                    farm.purchaseFeed(newValueInt, feedCost);
-                                    inter.refresh();
-                                } catch (NumberFormatException e) {
-                                    JOptionPane.showMessageDialog(inter, "Invalid format.");
-                                }
+    public JButton purchaseMoreFeedButton (Interface inter) {
+        JButton purchaseMoreFeedButton = new JButton("Purchase more");
+        purchaseMoreFeedButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        int feedCost = inter.game.getContract().getFeedCost();
+                        String newValue = JOptionPane.showInputDialog(inter, "Feed costs " +
+                                feedCost + " per unit. How many you want to purchase?", "0");
+                        if (newValue != null) {
+                            try {
+                                int newValueInt = Integer.parseInt(newValue);
+                                inter.game.getFarm().purchaseFeed(newValueInt, feedCost);
+                                inter.refresh();
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(inter, "Invalid format.");
                             }
                         }
                     }
-            );
+                }
+        );
+        return purchaseMoreFeedButton;
+    }
 
-            info.add(purchasedFeedLabel);
-            info.add(purchaseMoreFeedButton);
-        }
-
-        info.add(youngAnimalsLabel);
-        if (!contractSigned) {
-            info.add(Box.createGlue());
-            info.add(Box.createGlue());
-        }
-        else {
-            JLabel soldYoungAnimalsLabel = new JLabel("Sold (" + farm.getYoungAnimalsSold() + "/" + contract.getYoungAnimalsPerYear() + ")");
-            JButton sellMoreYoungAnimalsButton = new JButton("Sell more");
-            sellMoreYoungAnimalsButton.addActionListener(
-                    new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            int youngAnimalCost = contract.getYoungAnimalCost();
-                            String newValue = JOptionPane.showInputDialog(inter, "Young animals cost " +
-                                    youngAnimalCost + " per unit. How many you want to sell?", "0");
-                            if (newValue != null) {
-                                try {
-                                    int newValueInt = Integer.parseInt(newValue);
-                                    farm.sellYoungAnimals(newValueInt, youngAnimalCost);
-                                    inter.refresh();
-                                } catch (NumberFormatException e) {
-                                    JOptionPane.showMessageDialog(inter, "Invalid format.");
-                                }
+    public JButton sellMoreYoungAnimalsButton (Interface inter) {
+        JButton sellMoreYoungAnimalsButton = new JButton("Sell more");
+        sellMoreYoungAnimalsButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        int youngAnimalCost = inter.game.getContract().getYoungAnimalCost();
+                        String newValue = JOptionPane.showInputDialog(inter, "Young animals cost " +
+                                youngAnimalCost + " per unit. How many you want to sell?", "0");
+                        if (newValue != null) {
+                            try {
+                                int newValueInt = Integer.parseInt(newValue);
+                                inter.game.getFarm().sellYoungAnimals(newValueInt, youngAnimalCost);
+                                inter.refresh();
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(inter, "Invalid format.");
                             }
                         }
                     }
-            );
+                }
+        );
+        return sellMoreYoungAnimalsButton;
+    }
 
-            info.add(soldYoungAnimalsLabel);
-            info.add(sellMoreYoungAnimalsButton);
-        }
-
-        info.add(adultAnimalsLabel);
-        if (!contractSigned) {
-            info.add(Box.createGlue());
-            info.add(Box.createGlue());
-        }
-        else {
-            JLabel soldAdultAnimalsLabel = new JLabel("Sold (" + farm.getAdultAnimalsSold() + "/" + contract.getAdultAnimalsPerYear() + ")");
-            JButton sellMoreAdultAnimalsButton = new JButton("Sell more");
-            sellMoreAdultAnimalsButton.addActionListener(
-                    new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            int adultAnimalCost = contract.getAdultAnimalCost();
-                            String newValue = JOptionPane.showInputDialog(inter, "Adult animals cost " +
-                                    adultAnimalCost + " per unit. How many you want to sell?", "0");
-                            if (newValue != null) {
-                                try {
-                                    int newValueInt = Integer.parseInt(newValue);
-                                    farm.sellAdultAnimals(newValueInt, adultAnimalCost);
-                                    inter.refresh();
-                                } catch (NumberFormatException e) {
-                                    JOptionPane.showMessageDialog(inter, "Invalid format.");
-                                }
+    public JButton sellMoreAdultAnimalsButton (Interface inter) {
+        JButton sellMoreAdultAnimalsButton = new JButton("Sell more");
+        sellMoreAdultAnimalsButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        int adultAnimalCost = inter.game.getContract().getAdultAnimalCost();
+                        String newValue = JOptionPane.showInputDialog(inter, "Adult animals cost " +
+                                adultAnimalCost + " per unit. How many you want to sell?", "0");
+                        if (newValue != null) {
+                            try {
+                                int newValueInt = Integer.parseInt(newValue);
+                                inter.game.getFarm().sellAdultAnimals(newValueInt, adultAnimalCost);
+                                inter.refresh();
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(inter, "Invalid format.");
                             }
                         }
                     }
-            );
+                }
+        );
+        return sellMoreAdultAnimalsButton;
+    }
 
-            info.add(soldAdultAnimalsLabel);
-            info.add(sellMoreAdultAnimalsButton);
-        }
-
-        info.add(oldAnimalsLabel);
-        if (!contractSigned) {
-            info.add(Box.createGlue());
-            info.add(Box.createGlue());
-        }
-        else {
-            JLabel soldOldAnimalsLabel = new JLabel("Sold (" + farm.getOldAnimalsSold() + "/" + contract.getOldAnimalsPerYear() + ")");
-            JButton sellMoreOldAnimalsButton = new JButton("Sell more");
-            sellMoreOldAnimalsButton.addActionListener(
-                    new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            int oldAnimalCost = contract.getOldAnimalCost();
-                            String newValue = JOptionPane.showInputDialog(inter, "Old animals cost " +
-                                    oldAnimalCost + " per unit. How many you want to sell?", "0");
-                            if (newValue != null) {
-                                try {
-                                    int newValueInt = Integer.parseInt(newValue);
-                                    farm.sellOldAnimals(newValueInt, oldAnimalCost);
-                                    inter.refresh();
-                                } catch (NumberFormatException e) {
-                                    JOptionPane.showMessageDialog(inter, "Invalid format.");
-                                }
+    private JButton sellMoreOldAnimalsButton (Interface inter) {
+        JButton sellMoreOldAnimalsButton = new JButton("Sell more");
+        sellMoreOldAnimalsButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        int oldAnimalCost = inter.game.getContract().getOldAnimalCost();
+                        String newValue = JOptionPane.showInputDialog(inter, "Old animals cost " +
+                                oldAnimalCost + " per unit. How many you want to sell?", "0");
+                        if (newValue != null) {
+                            try {
+                                int newValueInt = Integer.parseInt(newValue);
+                                inter.game.getFarm().sellOldAnimals(newValueInt, oldAnimalCost);
+                                inter.refresh();
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(inter, "Invalid format.");
                             }
                         }
                     }
-            );
-
-            info.add(soldOldAnimalsLabel);
-            info.add(sellMoreOldAnimalsButton);
-        }
-
-        info.add(Box.createGlue());
-
-        if (!contractSigned) {
-            info.add(Box.createGlue());
-        }
-        else {
-            JButton fulfillAllContractTerms = fulfillAllContractTerms(inter);
-            info.add(fulfillAllContractTerms);
-        }
-        info.add(finishYear);
-
-        return info;
+                }
+        );
+        return sellMoreOldAnimalsButton;
     }
 
     private JButton fulfillAllContractTerms (Interface inter) {
@@ -365,8 +391,6 @@ public class Interface extends JFrame {
     }
 
     public JPanel showContractInfo() {
-        Interface inter = this;
-        Farm farm = game.getFarm();
         Contract contract = game.getContract();
         boolean contractSigned = contract.isSigned();
 
@@ -392,57 +416,57 @@ public class Interface extends JFrame {
         constraints.weightx = 1.0;
         contractInfo.add(generalInfo, constraints);
 
-        UpdateValueButton yearsButton = new UpdateValueButton(contract, inter, "Years: " + contract.getYears(),
+        UpdateValueButton yearsButton = new UpdateValueButton(contract, this, "Years: " + contract.getYears(),
                 "Set years:", "years", 3, 5);
         constraints.gridy = 1;
         constraints.gridwidth = 1;
         contractInfo.add(yearsButton, constraints);
 
-        UpdateValueButton feedCostButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton feedCostButton = new UpdateValueButton(contract, this,
                 "Feed cost: " + contract.getFeedCost(), "Set feed cost:", "feedCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 2;
         contractInfo.add(feedCostButton, constraints);
 
-        UpdateValueButton feedPerYearButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton feedPerYearButton = new UpdateValueButton(contract, this,
                 "Feed purchased per year: " + contract.getFeedPerYear(), "Set feed purchased per year:",
                 "feedPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
         contractInfo.add(feedPerYearButton, constraints);
 
-        UpdateValueButton youngAnimalCostButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton youngAnimalCostButton = new UpdateValueButton(contract, this,
                 "Young animal cost: " + contract.getYoungAnimalCost(), "Set young animal cost:",
                 "youngAnimalCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 3;
         constraints.gridx = 0;
         contractInfo.add(youngAnimalCostButton, constraints);
 
-        UpdateValueButton youngAnimalsPerYearButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton youngAnimalsPerYearButton = new UpdateValueButton(contract, this,
                 "Young animals sold per year: " + contract.getYoungAnimalsPerYear(),
                 "Set young animals sold per year:", "youngAnimalsPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
         contractInfo.add(youngAnimalsPerYearButton, constraints);
 
-        UpdateValueButton adultAnimalCostButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton adultAnimalCostButton = new UpdateValueButton(contract, this,
                 "Adult animal cost: " + contract.getAdultAnimalCost(), "Set adult animal cost:",
                 "adultAnimalCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 4;
         constraints.gridx = 0;
         contractInfo.add(adultAnimalCostButton, constraints);
 
-        UpdateValueButton adultAnimalsPerYearButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton adultAnimalsPerYearButton = new UpdateValueButton(contract, this,
                 "Adult animals sold per year: " + contract.getAdultAnimalCost(),
                 "Set adult animals sold per year:", "adultAnimalsPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
         contractInfo.add(adultAnimalsPerYearButton, constraints);
 
-        UpdateValueButton oldAnimalCostButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton oldAnimalCostButton = new UpdateValueButton(contract, this,
                 "Old animal cost: " + contract.getOldAnimalCost(), "Set old animal cost:",
                 "oldAnimalCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 5;
         constraints.gridx = 0;
         contractInfo.add(oldAnimalCostButton, constraints);
 
-        UpdateValueButton oldAnimalsPerYearButton = new UpdateValueButton(contract, inter,
+        UpdateValueButton oldAnimalsPerYearButton = new UpdateValueButton(contract, this,
                 "Old animals sold per year: " + contract.getOldAnimalsPerYear(),
                 "Set old animals sold per year:", "oldAnimalsPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
@@ -451,10 +475,19 @@ public class Interface extends JFrame {
         constraints.gridy = 6;
         contractInfo.add(Box.createGlue(), constraints);
 
-        JButton signButton;
-        if (!contractSigned) {
-            signButton = new JButton("Sign");
-            signButton.addActionListener(
+        JButton signButton = signContractButton(this);
+        constraints.gridy = 7;
+        constraints.weighty = 1.0;
+        contractInfo.add(signButton, constraints);
+
+        return contractInfo;
+    }
+
+    private JButton signContractButton(Interface inter) {
+        JButton signContractButton;
+        if (!inter.game.getContract().isSigned()) {
+            signContractButton = new JButton("Sign");
+            signContractButton.addActionListener(
                     new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
@@ -462,7 +495,7 @@ public class Interface extends JFrame {
                                     "Are you sure that you want to sign this contract? You won't be able to change it later.",
                                     "Select an option", JOptionPane.YES_NO_OPTION);
                             if (answer == 0) {
-                                contract.setSigned(true);
+                                inter.game.getContract().setSigned(true);
                                 refresh();
                             }
                         }
@@ -470,18 +503,13 @@ public class Interface extends JFrame {
             );
         }
         else {
-            signButton = new JButton("Contract signed!");
-            signButton.setBackground(Color.WHITE);
-            signButton.setFocusable(false);
-            signButton.setContentAreaFilled(false);
-            signButton.setBorderPainted(false);
+            signContractButton = new JButton("Contract signed!");
+            signContractButton.setBackground(Color.WHITE);
+            signContractButton.setFocusable(false);
+            signContractButton.setContentAreaFilled(false);
+            signContractButton.setBorderPainted(false);
         }
-
-        constraints.gridy = 7;
-        constraints.weighty = 1.0;
-        contractInfo.add(signButton, constraints);
-
-        return contractInfo;
+        return signContractButton;
     }
 
     private class UpdateValueButton extends JButton {
