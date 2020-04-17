@@ -175,27 +175,43 @@ public class Farm {
         oldAnimalsSold = 0;
     }
 
-    public void purchaseFeed (int amount, int cost) {
-        feed += amount;
-        feedPurchased += amount;
-        money -= amount * cost;
+    public boolean purchaseFeed (int amount, int cost) {
+        if (Game.CREDIT_MONEY || (money - amount * cost) >= 0) {
+            feed += amount;
+            feedPurchased += amount;
+            money -= amount * cost;
+            return true;
+        }
+        return false;
     }
 
-    public void sellYoungAnimals (int amount, int cost) {
-        youngAnimals -= amount;
-        youngAnimalsSold += amount;
-        money += amount * cost;
+    public boolean sellYoungAnimals (int amount, int cost) {
+        if (youngAnimals - amount >= 0) {
+            youngAnimals -= amount;
+            youngAnimalsSold += amount;
+            money += amount * cost;
+            return true;
+        }
+        return false;
     }
 
-    public void sellAdultAnimals (int amount, int cost) {
-        adultAnimals -= amount;
-        adultAnimalsSold += amount;
-        money += amount * cost;
+    public boolean sellAdultAnimals (int amount, int cost) {
+        if (adultAnimals - amount >= 0) {
+            adultAnimals -= amount;
+            adultAnimalsSold += amount;
+            money += amount * cost;
+            return true;
+        }
+        return false;
     }
 
-    public void sellOldAnimals (int amount, int cost) {
-        oldAnimals -= amount;
-        oldAnimalsSold += amount;
-        money += amount * cost;
+    public boolean sellOldAnimals (int amount, int cost) {
+        if (oldAnimals - amount >= 0) {
+            oldAnimals -= amount;
+            oldAnimalsSold += amount;
+            money += amount * cost;
+            return true;
+        }
+        return false;
     }
 }

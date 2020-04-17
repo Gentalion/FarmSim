@@ -66,8 +66,8 @@ public class Contract {
         feedPerYear = (farm.getYoungAnimals() + farm.getAdultAnimals() + farm.getOldAnimals()) * Game.MONTHS_IN_YEAR;
 
         feedCost = 1;
-        youngAnimalCost = 24;
-        adultAnimalCost = 48;
-        oldAnimalCost = 24;
+        youngAnimalCost = 48;
+        adultAnimalCost = 96;
+        oldAnimalCost = 48;
     }
 }

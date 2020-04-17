@@ -27,7 +27,7 @@ public class Interface extends JFrame {
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setJMenuBar(menuBar());
+        setJMenuBar(menuBar(false));
 
         JPanel welcomePanel = new JPanel();
         GridLayout gridLayout = new GridLayout(5, 3, 20, 5);
@@ -41,7 +41,7 @@ public class Interface extends JFrame {
         setVisible(true);
     }
 
-    private JMenuBar menuBar () {
+    private JMenuBar menuBar (boolean results) {
         JMenuBar jMenuBar = new JMenuBar();
 
         JMenu game = new JMenu("Game");
@@ -57,7 +57,9 @@ public class Interface extends JFrame {
                                 JOptionPane.YES_NO_OPTION);
                         if (answer == 0) {
                             frame.game.newGame();
-                            frame.showFarmInfo();
+                            frame.setJMenuBar(menuBar(false));
+                            frame.show = Show.FARM;
+                            frame.refresh();
                         }
                     }
                 }
@@ -73,8 +75,7 @@ public class Interface extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         frame.show = Show.FARM;
-                        frame.setContentPane(showFarmInfo());
-                        frame.revalidate();
+                        frame.refresh();
                     }
                 }
         );
@@ -88,12 +89,27 @@ public class Interface extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         frame.show = Show.CONTRACT;
-                        frame.setContentPane(showContractInfo());
-                        frame.revalidate();
+                        frame.refresh();
                     }
                 }
         );
         jMenuBar.add(showContract);
+
+        if (results) {
+            JButton showResults = new JButton("Result");
+            showResults.setBorderPainted(false);
+            showResults.setContentAreaFilled(false);
+            showResults.addActionListener(
+                    new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            frame.show = Show.GAME_OVER;
+                            frame.refresh();
+                        }
+                    }
+            );
+            jMenuBar.add(showResults);
+        }
 
         return jMenuBar;
     }
@@ -232,6 +248,7 @@ public class Interface extends JFrame {
                             if (answer == 0) {
                                 if (game.simulateYear()) {
                                     inter.show = Show.GAME_OVER;
+                                    inter.setJMenuBar(menuBar(true));
                                     inter.refresh();
                                 }
                                 else {
@@ -360,28 +377,7 @@ public class Interface extends JFrame {
                         int answer = JOptionPane.showConfirmDialog(inter, "Are you sure?",
                                 "Fulfill all contract terms", JOptionPane.YES_NO_OPTION);
                         if (answer == 0) {
-                            Contract contract = game.getContract();
-
-                            int unpurchasedFeed = contract.getFeedPerYear() - game.getFarm().getFeedPurchased();
-                            if (unpurchasedFeed > 0) {
-                                game.getFarm().purchaseFeed(unpurchasedFeed, contract.getFeedCost());
-                            }
-
-                            int unsoldYoungAnimals = contract.getYoungAnimalsPerYear() - game.getFarm().getYoungAnimalsSold();
-                            if (unsoldYoungAnimals > 0) {
-                                game.getFarm().sellYoungAnimals(unsoldYoungAnimals, contract.getYoungAnimalCost());
-                            }
-
-                            int unsoldAdultAnimals = contract.getAdultAnimalsPerYear() - game.getFarm().getAdultAnimalsSold();
-                            if (unsoldAdultAnimals > 0) {
-                                game.getFarm().sellAdultAnimals(unsoldAdultAnimals, contract.getAdultAnimalCost());
-                            }
-
-                            int unsoldOldAnimals = contract.getOldAnimalsPerYear() - game.getFarm().getOldAnimalsSold();
-                            if (unsoldOldAnimals > 0) {
-                                game.getFarm().sellOldAnimals(unsoldOldAnimals, contract.getOldAnimalCost());
-                            }
-
+                            game.fulfillAllContractTerms();
                             inter.refresh();
                         }
                     }
@@ -556,16 +552,39 @@ public class Interface extends JFrame {
         }
     }
 
+    public JPanel showGameOverInfo () {
+        JPanel gameOverInfo = new JPanel();
+        gameOverInfo.setLayout(new BoxLayout(gameOverInfo, BoxLayout.Y_AXIS));
+
+        JLabel congratulations = new JLabel("Congratulations, you finished your contract and here are your results:");
+        JLabel totalIncome = new JLabel("Your income is " + game.getTotalIncome());
+        JLabel totalFeedPurchased = new JLabel("You purchased " + game.getTotalFeedPurchased() + " feed");
+        JLabel totalYoungAnimalsSold = new JLabel("You sold " + game.getTotalYoungAnimalsSold() + " young animals");
+        JLabel totalAdultAnimalsSold = new JLabel("You sold " + game.getTotalAdultAnimalsSold() + " adult animals");
+        JLabel totalOldAnimalsSold = new JLabel("You sold " + game.getTotalOldAnimalsSold() + " old animals");
+
+        gameOverInfo.add(congratulations);
+        gameOverInfo.add(totalIncome);
+        gameOverInfo.add(totalFeedPurchased);
+        gameOverInfo.add(totalYoungAnimalsSold);
+        gameOverInfo.add(totalAdultAnimalsSold);
+        gameOverInfo.add(totalOldAnimalsSold);
+
+        return gameOverInfo;
+    }
+
     public void refresh () {
         switch (show) {
             case FARM:
                 setContentPane(showFarmInfo());
-                revalidate();
                 break;
             case CONTRACT:
                 setContentPane(showContractInfo());
-                revalidate();
+                break;
+            case GAME_OVER:
+                setContentPane(showGameOverInfo());
                 break;
         }
+        revalidate();
     }
 }
