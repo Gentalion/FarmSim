@@ -7,8 +7,8 @@ public class Game {
     public static int MONTHS_IN_YEAR = 12;
     public static double YOUNG_SURVIVAL_CHANCE = 0.75;
     public static double ADULT_BIRTH_RATE = 0.9;
-    public static double OLD_BIRTH_RATE = 0.6;
-    public static double OLD_MORTALITY = 0.5;
+    public static double OLD_BIRTH_RATE = 0.8;
+    public static double OLD_MORTALITY = 0.3;
     public static double UNEXPECTED_MORTALITY = 0.05;
     public static int INITIAL_MONEY = 5000;
     public static boolean CREDIT_MONEY = false;
@@ -65,7 +65,7 @@ public class Game {
                 random.ints(100,200).findFirst().getAsInt(),
                 random.ints(100,200).findFirst().getAsInt(),
                 random.ints(100,200).findFirst().getAsInt());
-        contract = new Contract(random.ints(3, 6).findFirst().getAsInt(), farm);
+        contract = new Contract(3, farm);
         yearsPast = 0;
         totalIncome = 0;
         totalFeedPurchased = 0;

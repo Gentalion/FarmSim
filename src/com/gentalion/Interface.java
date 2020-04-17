@@ -21,6 +21,7 @@ public class Interface extends JFrame {
 
     public Interface() {
         super("FarmSim");
+
         game = new Game();
         game.newGame();
 
@@ -131,30 +132,63 @@ public class Interface extends JFrame {
                 "\nYou run this farm for " + String.valueOf(game.getYearsPast() + 1) + ((game.getYearsPast() + 1) == 1 ? " year": " years") +
                 "</pre></html>");
 
-        JLabel moneyLabel;
-        JLabel feedLabel;
-        JLabel youngAnimalsLabel;
-        JLabel adultAnimalsLabel;
-        JLabel oldAnimalsLabel;
+        JComponent moneyLabel;
+        JComponent feedLabel;
+        JComponent youngAnimalsLabel;
+        JComponent adultAnimalsLabel;
+        JComponent oldAnimalsLabel;
 
         if (game.getYearsPast() > 0) {
-            moneyLabel = new JLabel("    Money: " + farm.getMoney() + " (" +
-                    (farm.getDeltaMoney() >= 0 ? "+" + farm.getDeltaMoney() : String.valueOf(farm.getDeltaMoney())) + ")");
-            feedLabel = new JLabel("    Feed: " + farm.getFeed() + " (" +
-                    (farm.getDeltaFeed() >= 0 ? "+" + farm.getDeltaFeed() : String.valueOf(farm.getDeltaFeed())) + ")");
-            youngAnimalsLabel = new JLabel("    Young animals: " + farm.getYoungAnimals() + " (" +
-                    (farm.getDeltaYoungAnimals() >= 0 ? "+" + farm.getDeltaYoungAnimals() : String.valueOf(farm.getDeltaYoungAnimals())) + ")");
-            adultAnimalsLabel = new JLabel("    Adult animals: " + farm.getAdultAnimals() + " (" +
-                    (farm.getDeltaAdultAnimals() >= 0 ? "+" + farm.getDeltaAdultAnimals() : String.valueOf(farm.getDeltaAdultAnimals())) + ")");
-            oldAnimalsLabel = new JLabel("    Old animals: " + farm.getOldAnimals() + " (" +
-                    (farm.getDeltaOldAnimals() >= 0 ? "+" + farm.getDeltaOldAnimals() : String.valueOf(farm.getDeltaOldAnimals())) + ")");
+//            moneyLabel = new JLabel("    Money: " + farm.getMoney() + " (" +
+//                    (farm.getDeltaMoney() >= 0 ? "+" + farm.getDeltaMoney() : String.valueOf(farm.getDeltaMoney())) + ")");
+//            feedLabel = new JLabel("    Feed: " + farm.getFeed() + " (" +
+//                    (farm.getDeltaFeed() >= 0 ? "+" + farm.getDeltaFeed() : String.valueOf(farm.getDeltaFeed())) + ")");
+//            youngAnimalsLabel = new JLabel("    Young animals: " + farm.getYoungAnimals() + " (" +
+//                    (farm.getDeltaYoungAnimals() >= 0 ? "+" + farm.getDeltaYoungAnimals() : String.valueOf(farm.getDeltaYoungAnimals())) + ")");
+//            adultAnimalsLabel = new JLabel("    Adult animals: " + farm.getAdultAnimals() + " (" +
+//                    (farm.getDeltaAdultAnimals() >= 0 ? "+" + farm.getDeltaAdultAnimals() : String.valueOf(farm.getDeltaAdultAnimals())) + ")");
+//            oldAnimalsLabel = new JLabel("    Old animals: " + farm.getOldAnimals() + " (" +
+//                    (farm.getDeltaOldAnimals() >= 0 ? "+" + farm.getDeltaOldAnimals() : String.valueOf(farm.getDeltaOldAnimals())) + ")");
+            moneyLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Money: " + farm.getMoney() + " (" + (farm.getDeltaMoney() >= 0 ? "+"
+                            + farm.getDeltaMoney() : String.valueOf(farm.getDeltaMoney())) + ")",
+                    "Set initial money", "money", 5000, 10000);
+            feedLabel = new UpdateValueButton(false, Farm.class, farm, this,
+                    "Feed: " + farm.getFeed() + " (" + (farm.getDeltaFeed() >= 0 ? "+"
+                            + farm.getDeltaFeed() : String.valueOf(farm.getDeltaFeed())) + ")",
+                    "Set initial feed", "feed", 0, 0);
+            youngAnimalsLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Young animals: " + farm.getYoungAnimals() + " ("
+                            + (farm.getDeltaYoungAnimals() >= 0 ? "+"
+                            + farm.getDeltaYoungAnimals() : String.valueOf(farm.getDeltaYoungAnimals())) + ")",
+                    "Set initial young animals", "youngAnimals", 100, 1000);
+            adultAnimalsLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Adult animals: " + farm.getAdultAnimals() + " (" +
+                            (farm.getDeltaAdultAnimals() >= 0 ? "+"
+                                    + farm.getDeltaAdultAnimals() : String.valueOf(farm.getDeltaAdultAnimals())) + ")",
+                    "Set initial adult animals", "adultAnimals", 100, 1000);
+            oldAnimalsLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Old animals: " + farm.getOldAnimals() + " (" +
+                            (farm.getDeltaOldAnimals() >= 0 ? "+"
+                                    + farm.getDeltaOldAnimals() : String.valueOf(farm.getDeltaOldAnimals())) + ")",
+                    "Set initial old animals", "oldAnimals", 100, 1000);
         }
         else {
-            moneyLabel = new JLabel("    Money: " + farm.getMoney());
-            feedLabel = new JLabel("    Feed: " + farm.getFeed());
-            youngAnimalsLabel = new JLabel("    Young animals: " + farm.getYoungAnimals());
-            adultAnimalsLabel = new JLabel("    Adult animals: " + farm.getAdultAnimals());
-            oldAnimalsLabel = new JLabel("    Old animals: " + farm.getOldAnimals());
+            moneyLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Money: " + farm.getMoney(), "Set initial money",
+                    "money", 5000, 10000);
+            feedLabel = new UpdateValueButton(false, Farm.class, farm, this,
+                    "Feed: " + farm.getFeed(), "Set initial feed",
+                    "feed", 0, 0);
+            youngAnimalsLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Young animals: " + farm.getYoungAnimals(), "Set initial young animals",
+                    "youngAnimals", 100, 1000);
+            adultAnimalsLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Adult animals: " + farm.getAdultAnimals(), "Set initial adult animals",
+                    "adultAnimals", 100, 1000);
+            oldAnimalsLabel = new UpdateValueButton(!contractSigned, Farm.class, farm, this,
+                    "Old animals: " + farm.getOldAnimals(), "Set initial old animals",
+                    "oldAnimals", 100, 1000);
         }
 
         //row #1
@@ -412,59 +446,59 @@ public class Interface extends JFrame {
         constraints.weightx = 1.0;
         contractInfo.add(generalInfo, constraints);
 
-        UpdateValueButton yearsButton = new UpdateValueButton(contract, this, "Years: " + contract.getYears(),
-                "Set years:", "years", 3, 5);
+        UpdateValueButton yearsButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this, "Years: " + contract.getYears(),
+                "Set years", "years", 3, 5);
         constraints.gridy = 1;
         constraints.gridwidth = 1;
         contractInfo.add(yearsButton, constraints);
 
-        UpdateValueButton feedCostButton = new UpdateValueButton(contract, this,
-                "Feed cost: " + contract.getFeedCost(), "Set feed cost:", "feedCost", 1, Integer.MAX_VALUE);
+        UpdateValueButton feedCostButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
+                "Feed cost: " + contract.getFeedCost(), "Set feed cost", "feedCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 2;
         contractInfo.add(feedCostButton, constraints);
 
-        UpdateValueButton feedPerYearButton = new UpdateValueButton(contract, this,
-                "Feed purchased per year: " + contract.getFeedPerYear(), "Set feed purchased per year:",
+        UpdateValueButton feedPerYearButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
+                "Feed purchased per year: " + contract.getFeedPerYear(), "Set feed purchased per year",
                 "feedPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
         contractInfo.add(feedPerYearButton, constraints);
 
-        UpdateValueButton youngAnimalCostButton = new UpdateValueButton(contract, this,
-                "Young animal cost: " + contract.getYoungAnimalCost(), "Set young animal cost:",
+        UpdateValueButton youngAnimalCostButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
+                "Young animal cost: " + contract.getYoungAnimalCost(), "Set young animal cost",
                 "youngAnimalCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 3;
         constraints.gridx = 0;
         contractInfo.add(youngAnimalCostButton, constraints);
 
-        UpdateValueButton youngAnimalsPerYearButton = new UpdateValueButton(contract, this,
+        UpdateValueButton youngAnimalsPerYearButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
                 "Young animals sold per year: " + contract.getYoungAnimalsPerYear(),
-                "Set young animals sold per year:", "youngAnimalsPerYear", 0, Integer.MAX_VALUE);
+                "Set young animals sold per year", "youngAnimalsPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
         contractInfo.add(youngAnimalsPerYearButton, constraints);
 
-        UpdateValueButton adultAnimalCostButton = new UpdateValueButton(contract, this,
-                "Adult animal cost: " + contract.getAdultAnimalCost(), "Set adult animal cost:",
+        UpdateValueButton adultAnimalCostButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
+                "Adult animal cost: " + contract.getAdultAnimalCost(), "Set adult animal cost",
                 "adultAnimalCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 4;
         constraints.gridx = 0;
         contractInfo.add(adultAnimalCostButton, constraints);
 
-        UpdateValueButton adultAnimalsPerYearButton = new UpdateValueButton(contract, this,
-                "Adult animals sold per year: " + contract.getAdultAnimalCost(),
-                "Set adult animals sold per year:", "adultAnimalsPerYear", 0, Integer.MAX_VALUE);
+        UpdateValueButton adultAnimalsPerYearButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
+                "Adult animals sold per year: " + contract.getAdultAnimalsPerYear(),
+                "Set adult animals sold per year", "adultAnimalsPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
         contractInfo.add(adultAnimalsPerYearButton, constraints);
 
-        UpdateValueButton oldAnimalCostButton = new UpdateValueButton(contract, this,
-                "Old animal cost: " + contract.getOldAnimalCost(), "Set old animal cost:",
+        UpdateValueButton oldAnimalCostButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
+                "Old animal cost: " + contract.getOldAnimalCost(), "Set old animal cost",
                 "oldAnimalCost", 1, Integer.MAX_VALUE);
         constraints.gridy = 5;
         constraints.gridx = 0;
         contractInfo.add(oldAnimalCostButton, constraints);
 
-        UpdateValueButton oldAnimalsPerYearButton = new UpdateValueButton(contract, this,
+        UpdateValueButton oldAnimalsPerYearButton = new UpdateValueButton(!contractSigned, Contract.class, contract, this,
                 "Old animals sold per year: " + contract.getOldAnimalsPerYear(),
-                "Set old animals sold per year:", "oldAnimalsPerYear", 0, Integer.MAX_VALUE);
+                "Set old animals sold per year", "oldAnimalsPerYear", 0, Integer.MAX_VALUE);
         constraints.gridx = 1;
         contractInfo.add(oldAnimalsPerYearButton, constraints);
 
@@ -509,9 +543,9 @@ public class Interface extends JFrame {
     }
 
     private class UpdateValueButton extends JButton {
-        public UpdateValueButton (Contract contract, Interface inter, String displayMessage, String updateMessage, String fieldName, int minValue, int maxValue) {
+        public UpdateValueButton (boolean clickable, Class clss, Object obj, Interface inter, String displayMessage, String updateMessage, String fieldName, int minValue, int maxValue) {
             super(displayMessage);
-            if(contract.isSigned() == true) {
+            if(!clickable) {
                 setBackground(Color.WHITE);
                 setFocusable(false);
                 setContentAreaFilled(false);
@@ -525,15 +559,16 @@ public class Interface extends JFrame {
                             public void actionPerformed(ActionEvent actionEvent) {
                                 Field field;
                                 try {
-                                    field = Contract.class.getDeclaredField(fieldName);
+                                    field = clss.getDeclaredField(fieldName);
                                     field.setAccessible(true);
 
-                                    String newValue = JOptionPane.showInputDialog(inter, updateMessage, field.get(contract));
+                                    String newValue = JOptionPane.showInputDialog(inter, updateMessage + " (from "
+                                            + minValue + " to " + maxValue + "):", field.get(obj));
                                     if (newValue != null) {
                                         try {
                                             int newValueInt = Integer.parseInt(newValue);
                                             if (newValueInt >= minValue && newValueInt <= maxValue) {
-                                                field.setInt(contract, newValueInt);
+                                                field.setInt(obj, newValueInt);
                                                 refresh();
                                             } else {
                                                 JOptionPane.showMessageDialog(inter, "Invalid format.");
